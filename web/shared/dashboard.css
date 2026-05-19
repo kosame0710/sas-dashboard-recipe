@@ -1,0 +1,16 @@
+body { font-family: "Yu Gothic UI", "Meiryo", sans-serif; margin: 0; background: #f5f7fa; color: #222; }
+header { background: #2a3441; color: white; padding: 12px 24px; }
+header h1 { margin: 0; font-size: 18px; }
+nav a { color: #cfd8dc; margin-right: 16px; text-decoration: none; }
+nav a:hover { color: white; }
+main { padding: 16px 24px; }
+.meta { color: #666; font-size: 12px; margin-bottom: 16px; }
+.card { background: white; border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.08); margin-bottom: 16px; }
+.filter { margin-bottom: 12px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { border-bottom: 1px solid #eee; padding: 6px 10px; text-align: left; }
+th { background: #f0f4f8; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+canvas { max-height: 320px; }
+select, button { padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; background: white; }
+code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-size: 12px; }

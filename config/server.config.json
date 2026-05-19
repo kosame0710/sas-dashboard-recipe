@@ -1,0 +1,20 @@
+{
+  "server": {
+    "port": 8080,
+    "bindAddress": "+",
+    "rootDir": "C:\\dashboard\\web",
+    "dataDir": "C:\\dashboard\\data",
+    "logDir": "C:\\dashboard\\logs"
+  },
+  "logging": {
+    "level": "INFO",
+    "rotateDays": 7
+  },
+  "security": {
+    "enableBasicAuth": false,
+    "allowedIps": []
+  },
+  "dashboards": [
+    { "id": "sales", "name": "月次売上", "dataFile": "sales_monthly.json" }
+  ]
+}

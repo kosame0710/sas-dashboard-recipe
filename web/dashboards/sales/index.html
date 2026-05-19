@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>月次売上ダッシュボード</title>
+    <link rel="stylesheet" href="../../shared/dashboard.css">
+</head>
+<body>
+    <header>
+        <h1>月次売上ダッシュボード</h1>
+        <nav><a href="../../">← 一覧へ</a></nav>
+    </header>
+    <main>
+        <div class="meta" id="meta"></div>
+        <div class="card">
+            <div class="filter">
+                カテゴリ:
+                <select id="categoryFilter"></select>
+            </div>
+            <canvas id="chart"></canvas>
+        </div>
+        <div class="card">
+            <table id="dataTable"><thead></thead><tbody></tbody></table>
+        </div>
+    </main>
+
+    <!--
+        Chart.js は CDN または同梱の chart.umd.min.js を使う。
+        社内CDN制限があれば以下を有効化:
+        <script src="../../shared/chart.umd.min.js"></script>
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- データ。data.js を先に読めば window.DASHBOARD_DATA から取れる。
+         サーバ経由なら /api/data/ から fetch する -->
+    <script src="data.js"></script>
+
+    <script src="../../shared/dashboard.js"></script>
+    <script>
+        (async () => {
+            try {
+                const payload = await Dashboard.loadData('/api/data/sales_monthly.json');
+                Dashboard.renderMeta(payload);
+
+                function update(filter) {
+                    const rows = filter === 'all'
+                        ? payload.data
+                        : payload.data.filter(r => r.category === filter);
+                    const summary = Dashboard.groupSum(rows, 'yyyymm', 'amount');
+                    Dashboard.renderChart('chart', 'bar',
+                        summary.map(s => s.key),
+                        [{ label: '売上', data: summary.map(s => s.value) }]);
+                    Dashboard.renderTable('dataTable', rows, [
+                        { field: 'category', label: 'カテゴリ' },
+                        { field: 'yyyymm',   label: '年月' },
+                        { field: 'amount',   label: '金額' }
+                    ]);
+                }
+
+                Dashboard.buildFilter(payload.data, 'category', 'categoryFilter', update);
+                update('all');
+            } catch (e) {
+                document.getElementById('meta').textContent = 'データの読み込みに失敗しました: ' + e.message;
+            }
+        })();
+    </script>
+</body>
+</html>

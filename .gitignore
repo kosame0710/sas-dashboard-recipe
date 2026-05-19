@@ -1,0 +1,29 @@
+# Logs
+logs/
+*.log
+*.lst
+
+# Generated data
+data/*.json
+web/dashboards/*/data.js
+
+# Local config (ユーザー環境固有)
+config/server.config.local.json
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# PowerShell
+*.ps1xml.cache
+
+# Backups
+*.bak
+*.orig
