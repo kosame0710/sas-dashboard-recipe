@@ -84,25 +84,24 @@ sas-dashboard-recipe/
 
 ---
 
-## 設計の考え方
+## 環境チェック（実装着手前）
 
-詳細は [docs/concept.md](docs/concept.md) を参照。要点のみ：
+社内環境で本リポジトリの構成が動作するかを事前に判定するスクリプトを `tools/check-environment.ps1` に同梱している。PowerShellの利用制限（ExecutionPolicy / LanguageMode / AppLocker / WDAC）、HttpListener のバインド可否、タスクスケジューラ登録可否、Defender ASR、ファイルシステム書込権限、ネットワーク、SAS Foundation 検出までを網羅的に検査し、`OK / WARN / NG / SKIP` で結果を出力する。
 
-- **ドメイン層は SAS を知らない** — 「指標」「帳票」「断面」といった業務概念のみを扱う
-- **SAS と Web 層の境界に契約（スキーマ）を置く** — `meta` ブロックを必ず含める
-- **PowerShell をグルー言語兼簡易バックエンドとして活用** — 追加ランタイム不要
-- **静的ファイル→簡易HTTP→IISの3段階で漸進的に昇格** — 作り直しではなく積み増し
+### 起動方法（実行ポリシー制限下でも動く）
 
----
+```powershell
+cd "C:\path\to\public-sas-dashboard"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\check-environment.ps1
+```
 
-## ライセンス
+ポートを明示したい場合:
 
-MIT License。詳細は [LICENSE](LICENSE) を参照。
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\check-environment.ps1 -Port 9000
+```
 
----
+### 出力
 
-## 想定されない用途・注意事項
-
-- 機密データを扱う場合、本構成のセキュリティは十分ではない。レベル 2 への昇格、または別途の暗号化・認証実装を要する。
-- HTTPS 化は本構成では扱っていない（社内ネットワーク内限定を前提）。
-- 本リポジトリのコードは「動くサンプル」であり、本番運用時はそれぞれの現場の制約・要件に応じた調整が必要。
+- コンソール: 区分ごとの判定とサマリ、末尾に「致命的NG（要対応）」のみ抽出した一覧
+- ファイル: `tools/check-report.md` に同内容を Markdown で保存（`-NoFileR
